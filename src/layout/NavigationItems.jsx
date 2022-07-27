@@ -9,51 +9,45 @@ import PeopleIcon from "@mui/icons-material/People";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import LayersIcon from "@mui/icons-material/Layers";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import QuizIcon from "@mui/icons-material/Quiz";
 import { NavLink } from "react-router-dom";
 
 const navLinkStyle = { textDecoration: "none", color: "black" };
 
 export const mainListItems = (
   <React.Fragment>
-    <NavLink to="/dashboard" style={navLinkStyle}>
+    <NavLink to="/ranking" style={navLinkStyle}>
       <ListItemButton>
         <ListItemIcon>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary="Dashboard" />
+        <ListItemText primary="Ranking" />
       </ListItemButton>
     </NavLink>
-    <NavLink to="/ordenes" style={navLinkStyle}>
+    <NavLink to="/trivia" style={navLinkStyle}>
       <ListItemButton>
         <ListItemIcon>
-          <ShoppingCartIcon />
+          <QuizIcon />
         </ListItemIcon>
-        <ListItemText primary="Ordenes" />
+        <ListItemText primary="Trivia" />
       </ListItemButton>
     </NavLink>
-    <NavLink to="/clientes" style={navLinkStyle}>
+    <NavLink to="/users" style={navLinkStyle}>
       <ListItemButton>
         <ListItemIcon>
           <PeopleIcon />
         </ListItemIcon>
-        <ListItemText primary="Funcionarios" />
+        <ListItemText primary="Usuarios" />
       </ListItemButton>
     </NavLink>
-    <NavLink to="/reportes" style={navLinkStyle}>
+    <NavLink to="/integration" style={navLinkStyle}>
       <ListItemButton>
         <ListItemIcon>
-          <BarChartIcon />
+          <LayersIcon />
         </ListItemIcon>
-        <ListItemText primary="Reportes" />
+        <ListItemText primary="Integrations" />
       </ListItemButton>
     </NavLink>
-
-    <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
-    </ListItemButton>
   </React.Fragment>
 );
 

@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import { LayoutContextProvider } from "./../context/LayoutContext";
 
-export default function ReportesPage() {
+export default function RankingPage() {
   const { setHeaderTitle } = useContext(LayoutContextProvider);
-
   useEffect(() => {
-    setHeaderTitle("Reportes");
+    setHeaderTitle("Ranking");
   }, [setHeaderTitle]);
-  return <div>ReportesPage</div>;
+
+  return <div>Ranking</div>;
 }
