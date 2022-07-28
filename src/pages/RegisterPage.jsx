@@ -14,6 +14,11 @@ import { NavLink } from "react-router-dom";
 //USER_REGEX El usuario tiene que comenzar con una letra mayus o minus, continuado por letras o numeros o guion bajo, con una longitud de entre 3 a 23 caracteres.
 //PWDD_REGEX la pwd tiene que tener minimo una mayuscula, una minuscula, un numero y un caracter especial, teniendo entre 8 a 24 caracteres
 
+
+//IMPORTANTE
+//FALTA CONECTAR EL FRONT CON EL BACK Y CHEQUEAR QUE ANDA TODO OKEY
+
+
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[._!@#$%]).{8,24}$/;
 const REGISTER_URL = "/register";
