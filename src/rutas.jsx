@@ -5,6 +5,8 @@ import RankingPage from './pages/RankingPage';
 import UsersPage from './pages/UsersPage';
 import TriviaPage from './pages/TriviaPage';
 import IntegrationPage from './pages/IntegrationPage';
+import LogInPage from './pages/LogInPage';
+import RegisterPage from './pages/RegisterPage';
 
 export default function Rutas() {
   return (
@@ -14,6 +16,8 @@ export default function Rutas() {
       <Route path="/users" element={<UsersPage />} />
       <Route path="/trivia" element={<TriviaPage />} />
       <Route path="/integration" element={<IntegrationPage />} />
+      <Route path="/login" element={<LogInPage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
