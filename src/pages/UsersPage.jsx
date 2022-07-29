@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { LayoutContextProvider } from "./../context/LayoutContext";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Card, Grid, Typography } from "@mui/material";
-import { rows as hardCodeRows } from "./UsersRowsHardcode";
+import { rows as hardCodeRows } from "../hardcode/UsersRowsHardcode";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedDialog from "../components/dialog/Dialog";
 import EditUser from "../components/EditUser";

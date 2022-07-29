@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { LayoutContextProvider } from "./../context/LayoutContext";
 import { DataGrid } from "@mui/x-data-grid";
 import { Card, Grid, Typography } from "@mui/material";
-import { rows } from "./RankingRowsHardcode";
+import { rows } from "../hardcode/RankingRowsHardcode";
 
 const columns = [
   { field: "id", headerName: "ID",  },

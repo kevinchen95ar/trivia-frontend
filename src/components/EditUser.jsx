@@ -12,9 +12,11 @@ export default function EditUser({
 }) {
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     setValidName(USER_REGEX.test(userData.username));
+    setError(false);
   }, [userData.username]);
 
   const roles = [
@@ -24,8 +26,8 @@ export default function EditUser({
   ];
 
   const onSubmit = () => {
-
     if (!validName) {
+      setError(true);
       return;
     }
     // Agregar llamada al backend
@@ -47,6 +49,7 @@ export default function EditUser({
           margin="normal"
           variant="outlined"
           color="primary"
+          error={error}
           fullWidth
           onChange={(e) =>
             setUserData({ ...userData, username: e.target.value })
