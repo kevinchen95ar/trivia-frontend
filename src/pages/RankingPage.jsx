@@ -25,7 +25,7 @@ const showColumns = {id: false, score: true, username: true, date: true, categor
 
 export default function RankingPage() {
   const { setHeaderTitle } = useContext(LayoutContextProvider);
-  const [pageSize, setPageSize] = React.useState(5);
+  const [pageSize, setPageSize] = React.useState(10);
 
   useEffect(() => {
     setHeaderTitle("Ranking");
@@ -53,7 +53,7 @@ export default function RankingPage() {
           columns={columns}
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5, 10, 15]}
+          rowsPerPageOptions={[10, 50, 100]}
           columnVisibilityModel={showColumns}
         />
       </Grid>

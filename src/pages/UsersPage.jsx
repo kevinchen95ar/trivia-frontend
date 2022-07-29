@@ -2,23 +2,34 @@ import React, { useEffect, useContext, useState } from "react";
 import { LayoutContextProvider } from "./../context/LayoutContext";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Card, Grid, Typography } from "@mui/material";
-import { rows } from "./UsersRowsHardcode";
+import { rows as hardCodeRows } from "./UsersRowsHardcode";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedDialog from "../components/dialog/Dialog";
 import EditUser from "../components/EditUser";
 
 export default function UsersPage() {
   const { setHeaderTitle } = useContext(LayoutContextProvider);
-  const [pageSize, setPageSize] = useState(5);
+
+  const [pageSize, setPageSize] = useState(10);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [reload, setReload] = useState(true);
+  const [user, setUser] = useState([]);
 
   useEffect(() => {
     setHeaderTitle("Usuarios");
   }, [setHeaderTitle]);
 
-  const onEdit = (e) => {
-    e.stopPropagation(); // don't select this row after clicking
-    e.preventDefault();
+  useEffect(() => {
+    if (reload) {
+      //cambiar el hardcode por la llamada a un get de usuarios
+      setRows(hardCodeRows);
+      setReload(false);
+    }
+  }, [reload]);
+
+  const onEdit = (id) => {
+    rows.map((row) => (row.id === id ? setUser(row) : ""));
     setEditDialogOpen(true);
   };
 
@@ -38,7 +49,7 @@ export default function UsersPage() {
       getActions: (params) => [
         <GridActionsCellItem
           icon={<EditIcon />}
-          onClick={onEdit}
+          onClick={() => onEdit(params.id)}
           label="Edit"
         />,
       ],
@@ -74,7 +85,7 @@ export default function UsersPage() {
             columns={columns}
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[5, 10, 15]}
+            rowsPerPageOptions={[10, 50, 100]}
             columnVisibilityModel={showColumns}
           />
         </Grid>
@@ -83,9 +94,9 @@ export default function UsersPage() {
       <CustomizedDialog
         setDialogOpen={setEditDialogOpen}
         dialogOpen={editDialogOpen}
-        modalTitle={"Edicion de usuario"}
+        modalTitle={"Edición de usuario"}
       >
-        <EditUser></EditUser>
+        <EditUser setDialogOpen={setEditDialogOpen} setReload={setReload} userData={user} setUserData={setUser}></EditUser>
       </CustomizedDialog>
     </Grid>
   );

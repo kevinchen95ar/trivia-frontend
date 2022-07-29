@@ -25,7 +25,7 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © "}
+      {"Hecho con ❤	por "}
       <Link color="inherit" href="https://github.com/kevinchen95ar">
         Kevin Chen
       </Link>{" "}
