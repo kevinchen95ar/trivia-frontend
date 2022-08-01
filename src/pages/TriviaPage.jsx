@@ -28,41 +28,45 @@ const dificulty = [
   { label: "Dificil" },
 ];
 
-const quantity = [
-  { label: "10" },
-  { label: "15" },
-  { label: "20" },
-];
+const quantity = [{ label: "10" }, { label: "15" }, { label: "20" }];
 
-const initialTriviaSettings = {category: "Deporte", dificulty: "Facil", quantity: "10"}
+const initialTriviaSettings = {
+  category: "Deporte",
+  dificulty: "Facil",
+  quantity: "10",
+};
 
 export default function TriviaPage() {
   const { setHeaderTitle } = useContext(LayoutContextProvider);
   const [triviaSettings, setTriviaSettings] = useState(initialTriviaSettings);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(1);
+  const [reload, setReload] = useState(true);
+
+  const handleClickOpen = () => {
+    //iniciar los datos del trivia aca
+    setDialogOpen(true);
+  };
+
+  const increaseCurrent = () => {
+    if (currentQuestion < parseInt(triviaSettings.quantity)) {
+      setCurrentQuestion(currentQuestion + 1);
+    }
+    // el codigo para finalizar el test
+    else {
+    }
+  };
 
   useEffect(() => {
     setHeaderTitle("Trivia");
   }, [setHeaderTitle]);
 
-  const handleClickOpen = () => {
-    //iniciar los datos del trivia aca
-    
-    setDialogOpen(true);
-  }
-
-    const increaseCurrent = () => {
-      if(currentQuestion < parseInt(triviaSettings.quantity)){
-        setCurrentQuestion(currentQuestion + 1);
-      } else
-      // el codigo para finalizar el test
-      {
-
-      }
-
-    };
-
+  useEffect(() => {
+    if (reload) {
+      setCurrentQuestion(1);
+      setTriviaSettings(initialTriviaSettings);
+    }
+  }, [reload]);
   return (
     <Grid>
       <Card
@@ -177,7 +181,14 @@ export default function TriviaPage() {
           triviaSettings.quantity
         }
       >
-        <Trivia questions={questionsHardCode} increaseCurrentQuestion={increaseCurrent} currentQuestion={currentQuestion} quantity={triviaSettings.quantity}></Trivia>
+        <Trivia
+          questions={questionsHardCode}
+          increaseCurrentQuestion={increaseCurrent}
+          currentQuestion={currentQuestion}
+          quantity={parseInt(triviaSettings.quantity)}
+          setReload={setReload}
+          setDialogOpen={setDialogOpen}
+        ></Trivia>
       </FullScreenDialog>
     </Grid>
   );
