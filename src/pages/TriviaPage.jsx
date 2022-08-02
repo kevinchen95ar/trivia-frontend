@@ -22,17 +22,13 @@ const category = [
   { label: "Animales" },
 ];
 
-const dificulty = [
-  { label: "Facil" },
-  { label: "Medio" },
-  { label: "Dificil" },
-];
+const difficulty = [{ label: "easy" }, { label: "medium" }, { label: "hard" }];
 
 const quantity = [{ label: "10" }, { label: "15" }, { label: "20" }];
 
 const initialTriviaSettings = {
   category: "Deporte",
-  dificulty: "Facil",
+  difficulty: "easy",
   quantity: "10",
 };
 
@@ -42,9 +38,60 @@ export default function TriviaPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(1);
   const [reload, setReload] = useState(true);
+  const [finished, setFinished] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [triviaTime, setTriviaTime] = useState(0);
+
+  const calculateTriviaTime = (dif, qua) => {
+    let time = 0;
+    switch (dif) {
+      case "easy":
+        time = 30 * qua;
+        break;
+      case "medium":
+        time = 45 * qua;
+        break;
+      case "hard":
+        time = 60 * qua;
+        break;
+      default:
+        time = 0 * qua;
+        break;
+    }
+    setTriviaTime(time);
+    setTimeLeft(time);
+  };
+
+  const formatTime = (time) => {
+    let hours = Math.floor((time / (60 * 60)) % 24);
+    let minutes = Math.floor((time / 60) % 60);
+    let seconds = Math.floor(time % 60);
+    let formattedHours = "";
+    let formattedMinutes = "";
+    let formattedSeconds = "";
+
+    if (hours < 10) {
+      formattedHours = "0" + hours;
+    } else {
+      formattedHours = hours;
+    }
+    if (minutes < 10) {
+      formattedMinutes = "0" + minutes;
+    } else {
+      formattedMinutes = minutes;
+    }
+    if (seconds < 10) {
+      formattedSeconds = "0" + seconds;
+    } else {
+      formattedSeconds = seconds;
+    }
+    let formattedTime = `${formattedHours}:${formattedMinutes}:${formattedSeconds} `;
+    return formattedTime;
+  };
 
   const handleClickOpen = () => {
     //iniciar los datos del trivia aca
+    calculateTriviaTime(triviaSettings.difficulty, triviaSettings.quantity);
     setDialogOpen(true);
   };
 
@@ -65,8 +112,16 @@ export default function TriviaPage() {
     if (reload) {
       setCurrentQuestion(1);
       setTriviaSettings(initialTriviaSettings);
+      setFinished(false);
+      setReload(false);
     }
   }, [reload]);
+
+  useEffect(() => {
+    if (timeLeft > 0 && !finished) {
+      setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+    }
+  }, [timeLeft, finished]);
   return (
     <Grid>
       <Card
@@ -113,9 +168,9 @@ export default function TriviaPage() {
             <Grid item xs={11} marginTop={3} marginBottom={1}>
               <Autocomplete
                 fullWidth
-                id="dificulty-autocomplete"
-                options={dificulty}
-                value={triviaSettings.dificulty}
+                id="difficulty-autocomplete"
+                options={difficulty}
+                value={triviaSettings.difficulty}
                 clearIcon={false}
                 freeSolo={false}
                 renderInput={(params) => (
@@ -124,7 +179,7 @@ export default function TriviaPage() {
                 onChange={(e, newValue) => {
                   setTriviaSettings({
                     ...triviaSettings,
-                    dificulty: newValue.label,
+                    difficulty: newValue.label,
                   });
                 }}
               />
@@ -170,16 +225,9 @@ export default function TriviaPage() {
       <FullScreenDialog
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
-        modalTitle={
-          "CATEGORIA: " +
-          triviaSettings.category +
-          " - DIFICULTAD: " +
-          triviaSettings.dificulty +
-          " - PREGUNTA: " +
-          currentQuestion +
-          "/" +
+        modalTitle={`PREGUNTA: ${currentQuestion}/${
           triviaSettings.quantity
-        }
+        } - TIEMPO RESTANTE: ${formatTime(timeLeft)}`}
       >
         <Trivia
           questions={questionsHardCode}
@@ -187,7 +235,13 @@ export default function TriviaPage() {
           currentQuestion={currentQuestion}
           quantity={parseInt(triviaSettings.quantity)}
           setReload={setReload}
+          dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
+          finished={finished}
+          setFinished={setFinished}
+          timeLeft={timeLeft}
+          triviaTime={triviaTime}
+          triviaSettings={triviaSettings}
         ></Trivia>
       </FullScreenDialog>
     </Grid>

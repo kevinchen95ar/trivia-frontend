@@ -18,11 +18,15 @@ export default function Trivia(props) {
     quantity,
     setReload,
     setDialogOpen,
+    finished,
+    setFinished,
+    timeLeft,
+    triviaTime,
+    triviaSettings,
   } = props;
   const [answers, setAnswers] = useState([]);
   const [userAnswers, setUserAnswers] = useState([]);
   const [answerSelected, setAnswerSelected] = useState("");
-  const [finished, setFinished] = useState(false);
   const [score, setScore] = useState(0);
 
   const mixAnswers = () => {
@@ -49,11 +53,10 @@ export default function Trivia(props) {
     let correct = 0;
     let difFactor = 1;
     let timeFactor = 1;
+    let quan = parseInt(quantity);
 
     //cantidad de respuestas correctas --OK
     for (var j = 0; j < quantity; j++) {
-      console.log(questions[j].correct_answer);
-      console.log(userAnswers[j]);
       if (questions[j].correct_answer === userAnswers[j]) {
         correct = correct + 1;
       }
@@ -73,9 +76,15 @@ export default function Trivia(props) {
         difFactor = 0;
         break;
     }
-    //factor tiempo --TODO
-
-    setScore((correct / quantity) * difFactor * timeFactor);
+    //factor tiempo --OK
+    if ((triviaTime - timeLeft) / quan < 5) {
+      timeFactor = 5;
+    } else if ((triviaTime - timeLeft) / quan < 20) {
+      timeFactor = 3;
+    } else {
+      timeFactor = 1;
+    }
+    setScore((correct / quan) * difFactor * timeFactor);
   };
 
   const onClickNext = () => {
@@ -127,9 +136,40 @@ export default function Trivia(props) {
         >
           {finished ? (
             <Grid>
-              {" "}
-              Puntaje: {score}
-              <Button onChange={onClickSave}>Guardar</Button>
+              <Grid item textAlign={"center"} xs={12} margin={5}>
+                <Typography variant="h3">Resultados del trivia</Typography>
+              </Grid>
+              <Divider></Divider>
+              <Grid item textAlign={"left"} xs={12} margin={5}>
+                <Typography variant="h4">
+                  Dificultad: {triviaSettings.difficulty}
+                </Typography>
+              </Grid>
+              <Grid item textAlign={"left"} xs={12} margin={5}>
+                <Typography variant="h4">
+                  Categoria: {triviaSettings.category}
+                </Typography>
+              </Grid>
+              <Grid item textAlign={"left"} xs={12} margin={5}>
+                <Typography variant="h4">
+                  Cantidad de preguntas: {triviaSettings.quantity}
+                </Typography>
+              </Grid>
+              <Grid item textAlign={"center"} xs={12} margin={5}>
+                <Typography fontWeight={"bold"} variant="h4">
+                  Puntaje Final: {score}
+                </Typography>
+              </Grid>
+              <Grid container justifyContent="center">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={onClickSave}
+                >
+                  Guardar
+                </Button>
+              </Grid>
             </Grid>
           ) : (
             <Grid>
