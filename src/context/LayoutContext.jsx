@@ -3,7 +3,8 @@ import React, { useState, createContext } from "react";
 export const LayoutContextProvider = createContext();
 
 const LayoutContext = (props) => {
-const [headerTitle, setHeaderTitle] = useState("");
+  const [headerTitle, setHeaderTitle] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
   return (
     <div>
@@ -11,6 +12,8 @@ const [headerTitle, setHeaderTitle] = useState("");
         value={{
           headerTitle,
           setHeaderTitle,
+          loggedIn,
+          setLoggedIn,
         }}
       >
         {props.children}

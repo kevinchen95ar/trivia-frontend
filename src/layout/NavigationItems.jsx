@@ -7,8 +7,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import LayersIcon from "@mui/icons-material/Layers";
 import QuizIcon from "@mui/icons-material/Quiz";
 import { NavLink } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from "@mui/icons-material/Login";
+import NavigationLogInOut from "./NavigationLogInOut";
 
 const navLinkStyle = { textDecoration: "none", color: "black" };
 
@@ -49,24 +48,4 @@ export const mainListItems = (
   </React.Fragment>
 );
 
-export const secondaryListItems = (
-  <React.Fragment>
-    {/* Agregar auth para que solo muestre si no esta iniciado */}
-    <NavLink to="/login" style={navLinkStyle}>
-      <ListItemButton>
-        <ListItemIcon>
-          <LoginIcon />
-        </ListItemIcon>
-        <ListItemText primary="Iniciar sesión" />
-      </ListItemButton>
-    </NavLink>
-
-    {/* Agregar auth para que solo muestre si esta iniciado */}
-    <ListItemButton>
-      <ListItemIcon>
-        <LogoutIcon />
-      </ListItemIcon>
-      <ListItemText primary="Cerrar sesión" />
-    </ListItemButton>
-  </React.Fragment>
-);
+export const secondaryListItems = <NavigationLogInOut></NavigationLogInOut>;

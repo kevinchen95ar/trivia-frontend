@@ -14,7 +14,7 @@ import { NavLink } from "react-router-dom";
 const LOGIN_URL = "/login";
 
 export default function LogInPage() {
-  const { setHeaderTitle } = useContext(LayoutContextProvider);
+  const { setHeaderTitle, setLoggedIn } = useContext(LayoutContextProvider);
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
@@ -33,7 +33,7 @@ export default function LogInPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // if button enabled with JS hack
-   
+
     try {
       const response = await axios.post(
         LOGIN_URL,
@@ -48,7 +48,10 @@ export default function LogInPage() {
       console.log(response?.accessToken);
       console.log(JSON.stringify(response));
 
+      // Se pudo iniciar sesion
       setSuccess(true);
+      setLoggedIn(true);
+
       //clear state and controlled inputs
       //need value attrib on inputs for this
       setUser("");
