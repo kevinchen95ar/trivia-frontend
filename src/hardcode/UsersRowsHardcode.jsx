@@ -2,16 +2,16 @@ export const rows = [
   {
     id: 1,
     username: "Kevin",
-    rol: "Administrador",
+    role: "Administrador",
   },
   {
     id: 2,
     username: "Agus",
-    rol: "Editor",
+    role: "Editor",
   },
   {
     id: 3,
     username: "Andres",
-    rol: "Normal",
+    role: "Normal",
   },
 ];

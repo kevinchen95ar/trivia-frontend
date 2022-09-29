@@ -8,10 +8,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "../api/axios";
+// import axios from "axios";
 import { NavLink } from "react-router-dom";
-
-const LOGIN_URL = "/login";
 
 export default function LogInPage() {
   const { setHeaderTitle, setLoggedIn } = useContext(LayoutContextProvider);
@@ -32,28 +30,13 @@ export default function LogInPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // if button enabled with JS hack
 
     try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-
-      console.log(response?.data);
-      console.log(response?.accessToken);
-      console.log(JSON.stringify(response));
-
-      // Se pudo iniciar sesion
+      //Inicio de sesion exitoso.
       setSuccess(true);
       setLoggedIn(true);
 
-      //clear state and controlled inputs
-      //need value attrib on inputs for this
+      //limpieza de states e inputs
       setUser("");
       setPwd("");
     } catch (err) {

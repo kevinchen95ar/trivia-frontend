@@ -37,7 +37,7 @@ export default function UsersPage() {
     { field: "id", headerName: "ID" },
     { field: "username", headerName: "Nombre de usuario", flex: 1 },
     {
-      field: "rol",
+      field: "role",
       headerName: "Rol",
       flex: 1,
     },
@@ -59,7 +59,7 @@ export default function UsersPage() {
   const showColumns = {
     id: false,
     username: true,
-    rol: true,
+    role: true,
   };
 
   return (
@@ -96,7 +96,12 @@ export default function UsersPage() {
         dialogOpen={editDialogOpen}
         modalTitle={"Edición de usuario"}
       >
-        <EditUser setDialogOpen={setEditDialogOpen} setReload={setReload} userData={user} setUserData={setUser}></EditUser>
+        <EditUser
+          setDialogOpen={setEditDialogOpen}
+          setReload={setReload}
+          userData={user}
+          setUserData={setUser}
+        ></EditUser>
       </CustomizedDialog>
     </Grid>
   );

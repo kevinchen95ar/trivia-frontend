@@ -40,7 +40,10 @@ export default function AddQuestion() {
           freeSolo={false}
           renderInput={(params) => <TextField {...params} label="Categoria" />}
           onChange={(e, newValue) => {
-            setQuestionSettings({ ...questionSettings, rol: newValue.label });
+            setQuestionSettings({
+              ...questionSettings,
+              category: newValue.label,
+            });
           }}
         />
       </Grid>
@@ -54,7 +57,10 @@ export default function AddQuestion() {
           freeSolo={false}
           renderInput={(params) => <TextField {...params} label="Dificultad" />}
           onChange={(e, newValue) => {
-            setQuestionSettings({ ...questionSettings, rol: newValue.label });
+            setQuestionSettings({
+              ...questionSettings,
+              difficulty: newValue.label,
+            });
           }}
         />
       </Grid>
@@ -69,7 +75,10 @@ export default function AddQuestion() {
           freeSolo={false}
           renderInput={(params) => <TextField {...params} label="Cantidad" />}
           onChange={(e, newValue) => {
-            setQuestionSettings({ ...questionSettings, rol: newValue.label });
+            setQuestionSettings({
+              ...questionSettings,
+              quantity: newValue.label,
+            });
           }}
         />
       </Grid>

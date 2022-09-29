@@ -71,14 +71,14 @@ export default function EditUser({
       <Grid item xs={12} marginTop={2} marginBottom={1}>
         <Autocomplete
           fullWidth
-          id="rol-autocomplete"
+          id="role-autocomplete"
           options={roles}
-          value={userData.rol}
+          value={userData.role}
           clearIcon={false}
           freeSolo={false}
           renderInput={(params) => <TextField {...params} label="Rol" />}
           onChange={(e, newValue) => {
-            setUserData({ ...userData, rol: newValue.label });
+            setUserData({ ...userData, role: newValue.label });
           }}
         />
       </Grid>

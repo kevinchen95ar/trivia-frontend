@@ -8,20 +8,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "../api/axios";
+import axios from "axios";
 import { NavLink } from "react-router-dom";
 
 //USER_REGEX El usuario tiene que comenzar con una letra mayus o minus, continuado por letras o numeros o guion bajo, con una longitud de entre 3 a 23 caracteres.
 //PWDD_REGEX la pwd tiene que tener minimo una mayuscula, una minuscula, un numero y un caracter especial, teniendo entre 8 a 24 caracteres
 
-
-//IMPORTANTE
-//FALTA CONECTAR EL FRONT CON EL BACK Y CHEQUEAR QUE ANDA TODO OKEY
-
-
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[._!@#$%]).{8,24}$/;
-const REGISTER_URL = "/register";
 
 export default function RegisterPage() {
   const { setHeaderTitle } = useContext(LayoutContextProvider);
@@ -64,13 +58,17 @@ export default function RegisterPage() {
     setHeaderTitle("Registrar");
   }, [setHeaderTitle]);
 
+  //metodo al confirmar el registro
   const handleSubmit = async (e) => {
     e.preventDefault();
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
+    // comprobamos que tanto el nombre y usuario y la contraseña esten bien ingresados
     if (!v1 || !v2) {
       setErrMsg("Datos incorrectos");
-      if (!v1) { setUserError(true)}
+      if (!v1) {
+        setUserError(true);
+      }
       if (!v2) {
         setPwdError(true);
       }
@@ -80,22 +78,15 @@ export default function RegisterPage() {
       return;
     }
     try {
-      const response = await axios.post(
-        REGISTER_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
+      //Peticion al backend de registro
+      await axios.post("http://localhost:4000/register", {
+        username: user,
+        password: pwd,
+      });
 
-      console.log(response?.data);
-      console.log(response?.accessToken);
-      console.log(JSON.stringify(response));
-
+      //Registrado correctamente
       setSuccess(true);
-      //clear state and controlled inputs
-      //need value attrib on inputs for this
+      //limpieza de states e inputs
       setUser("");
       setPwd("");
       setMatchPwd("");

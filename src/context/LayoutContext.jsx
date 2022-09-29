@@ -5,6 +5,7 @@ export const LayoutContextProvider = createContext();
 const LayoutContext = (props) => {
   const [headerTitle, setHeaderTitle] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedInRole, setLoggedInRole] = useState("");
 
   return (
     <div>
@@ -14,6 +15,8 @@ const LayoutContext = (props) => {
           setHeaderTitle,
           loggedIn,
           setLoggedIn,
+          loggedInRole,
+          setLoggedInRole,
         }}
       >
         {props.children}
