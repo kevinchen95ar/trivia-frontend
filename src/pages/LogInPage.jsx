@@ -8,11 +8,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-// import axios from "axios";
+import axios from "axios";
 import { NavLink } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 export default function LogInPage() {
-  const { setHeaderTitle, setLoggedIn } = useContext(LayoutContextProvider);
+  const { setHeaderTitle, setLoggedIn, setLoggedInRole } = useContext(
+    LayoutContextProvider
+  );
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
@@ -32,9 +35,21 @@ export default function LogInPage() {
     e.preventDefault();
 
     try {
+      //Peticion de inicio de sesión
+      const response = await axios.post("http://localhost:4000/login", {
+        username: user,
+        password: pwd,
+      });
+
       //Inicio de sesion exitoso.
-      setSuccess(true);
+
+      //guardamos el token en el localstorage
+      localStorage.setItem("token", response.data.token);
+      //destructuramos el token y sacamos el role para colocarlo en el context
+      const decoded = jwt_decode(response.data.token);
+      setLoggedInRole(decoded.role);
       setLoggedIn(true);
+      setSuccess(true);
 
       //limpieza de states e inputs
       setUser("");
@@ -42,6 +57,8 @@ export default function LogInPage() {
     } catch (err) {
       if (!err?.response) {
         setErrMsg("Sin respuesta del servidor.");
+      } else if (err.response?.status === 401) {
+        setErrMsg(err.response.data);
       } else {
         setErrMsg("Credenciales incorrectas.");
       }
