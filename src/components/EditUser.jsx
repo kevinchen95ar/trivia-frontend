@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Button, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import axios from "axios";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 
@@ -12,11 +13,13 @@ export default function EditUser({
 }) {
   const [validName, setValidName] = useState(false);
   const [userFocus, setUserFocus] = useState(false);
-  const [error, setError] = useState(false);
+  const [userError, setUserError] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
     setValidName(USER_REGEX.test(userData.username));
-    setError(false);
+    setUserError(false);
+    setErrMsg("");
   }, [userData.username]);
 
   const roles = [
@@ -27,17 +30,46 @@ export default function EditUser({
 
   const onSubmit = () => {
     if (!validName) {
-      setError(true);
+      setUserError(true);
       return;
     }
-    // Agregar llamada al backend
-
-    setDialogOpen(false);
-    setReload(true);
+    // Llamada a actualizar el usuario al backend
+    axios
+      .put("http://localhost:4000/users", userData)
+      .then(() => {
+        // Cerramos ventana y relodeamos la tabla
+        setDialogOpen(false);
+        setReload(true);
+      })
+      .catch((error) => {
+        if (error.response?.status === 409) {
+          setErrMsg("El nombre de usuario ya esta en uso");
+          setUserError(true);
+        } else {
+          setErrMsg("Fallo en el registro");
+        }
+      });
   };
 
   return (
     <Grid container width={400}>
+      {errMsg !== "" ? (
+        <Grid item marginLeft={1} marginBottom={1} marginTop={1}>
+          <Typography
+            style={{
+              color: "#d32f2f",
+              borderRadius: "5px",
+            }}
+            variant="h7"
+            gutterBottom
+            textAlign={"center"}
+          >
+            {errMsg}
+          </Typography>
+        </Grid>
+      ) : (
+        ""
+      )}
       <Grid item xs={12}>
         <TextField
           id="username"
@@ -49,7 +81,7 @@ export default function EditUser({
           margin="normal"
           variant="outlined"
           color="primary"
-          error={error}
+          error={userError}
           fullWidth
           onChange={(e) =>
             setUserData({ ...userData, username: e.target.value })

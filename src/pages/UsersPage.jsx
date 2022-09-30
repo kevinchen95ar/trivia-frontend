@@ -2,10 +2,10 @@ import React, { useEffect, useContext, useState } from "react";
 import { LayoutContextProvider } from "./../context/LayoutContext";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Card, Grid, Typography } from "@mui/material";
-import { rows as hardCodeRows } from "../hardcode/UsersRowsHardcode";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedDialog from "../components/dialog/Dialog";
 import EditUser from "../components/EditUser";
+import axios from "axios";
 
 export default function UsersPage() {
   const { setHeaderTitle } = useContext(LayoutContextProvider);
@@ -22,8 +22,15 @@ export default function UsersPage() {
 
   useEffect(() => {
     if (reload) {
-      //cambiar el hardcode por la llamada a un get de usuarios
-      setRows(hardCodeRows);
+      //Obtenemos todos los usuarios en caso de que se necesite recargar
+      axios
+        .get("http://localhost:4000/users")
+        .then((res) => {
+          setRows(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setReload(false);
     }
   }, [reload]);
