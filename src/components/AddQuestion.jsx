@@ -1,16 +1,6 @@
 import { Autocomplete, Button, Grid, TextField } from "@mui/material";
-import React, { useState } from "react";
-
-const category = [
-  { label: "Deporte" },
-  { label: "Alimentos" },
-  { label: "Ocio" },
-  { label: "Juegos" },
-  { label: "Peliculas" },
-  { label: "Animales" },
-];
-
-const difficulty = [{ label: "easy" }, { label: "medium" }, { label: "hard" }];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const quantity = [
   { label: "10" },
@@ -20,12 +10,42 @@ const quantity = [
   { label: "50" },
 ];
 
-export default function AddQuestion() {
+export default function AddQuestion(props) {
+  const { categories, setDialogOpen } = props;
   const [questionSettings, setQuestionSettings] = useState([]);
+  const [difficulty, setDifficulty] = useState([]);
+  const [category, setCategory] = useState([]);
 
+  //useEffect de difficulty
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/difficulty/all")
+      .then((res) => {
+        var dif = [];
+        res.data.forEach((e) => {
+          dif.push({ label: e.difficulty });
+        });
+        setDifficulty(dif);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  //useEffect de category
+  useEffect(() => {
+    var cat = [];
+    categories.forEach((e) => {
+      cat.push({ label: e.category });
+    });
+    setCategory(cat);
+  }, [categories]);
+
+  //TODO: falta hacer
   const onSubmit = () => {
     // Cerrar el dialog y hacer el promise para traer las preguntas con las questionSettings
     console.log("agregar preguntas");
+    setDialogOpen(false);
   };
 
   return (

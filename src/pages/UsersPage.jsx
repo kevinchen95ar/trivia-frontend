@@ -6,9 +6,12 @@ import EditIcon from "@mui/icons-material/Edit";
 import CustomizedDialog from "../components/dialog/Dialog";
 import EditUser from "../components/EditUser";
 import axios from "axios";
+import UnauthorizedPage from "./UnauthorizedPage";
 
 export default function UsersPage() {
-  const { setHeaderTitle } = useContext(LayoutContextProvider);
+  const { setHeaderTitle, loggedIn, loggedInRole } = useContext(
+    LayoutContextProvider
+  );
 
   const [pageSize, setPageSize] = useState(10);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -70,46 +73,57 @@ export default function UsersPage() {
   };
 
   return (
-    <Grid>
-      <Card
-        style={{
-          height: 600,
-          minHeight: 400,
-          width: "100%",
-          minWidth: 400,
-          padding: "20px 5px",
-          margin: "0 auto",
-        }}
-      >
-        <Grid marginLeft={2}>
-          <Typography component="h2" variant="h6" color="primary" gutterBottom>
-            Tabla de usuarios
-          </Typography>
-        </Grid>
-        <Grid style={{ height: 530, width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={pageSize}
-            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-            rowsPerPageOptions={[10, 50, 100]}
-            columnVisibilityModel={showColumns}
-          />
-        </Grid>
-      </Card>
+    <React.Fragment>
+      {loggedIn && loggedInRole === "Administrador" ? (
+        <Grid>
+          <Card
+            style={{
+              height: 600,
+              minHeight: 400,
+              width: "100%",
+              minWidth: 400,
+              padding: "20px 5px",
+              margin: "0 auto",
+            }}
+          >
+            <Grid marginLeft={2}>
+              <Typography
+                component="h2"
+                variant="h6"
+                color="primary"
+                gutterBottom
+              >
+                Tabla de usuarios
+              </Typography>
+            </Grid>
+            <Grid style={{ height: 530, width: "100%" }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={pageSize}
+                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                rowsPerPageOptions={[10, 50, 100]}
+                columnVisibilityModel={showColumns}
+              />
+            </Grid>
+          </Card>
 
-      <CustomizedDialog
-        setDialogOpen={setEditDialogOpen}
-        dialogOpen={editDialogOpen}
-        modalTitle={"Edición de usuario"}
-      >
-        <EditUser
-          setDialogOpen={setEditDialogOpen}
-          setReload={setReload}
-          userData={user}
-          setUserData={setUser}
-        ></EditUser>
-      </CustomizedDialog>
-    </Grid>
+          <CustomizedDialog
+            setDialogOpen={setEditDialogOpen}
+            dialogOpen={editDialogOpen}
+            modalTitle={"Edición de usuario"}
+          >
+            <EditUser
+              setDialogOpen={setEditDialogOpen}
+              setReload={setReload}
+              userData={user}
+              setUserData={setUser}
+            ></EditUser>
+          </CustomizedDialog>
+        </Grid>
+      ) : (
+        <UnauthorizedPage></UnauthorizedPage>
+      )}
+    </React.Fragment>
   );
 }
