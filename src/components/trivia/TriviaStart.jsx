@@ -21,7 +21,7 @@ export default function TriviaStart(props) {
       <Grid item>
         <Typography variant="h1"> Trivia</Typography>
       </Grid>
-      <Grid item>
+      <Grid item marginX={5}>
         <Typography variant="h5">
           Esta por iniciar un trivia con las siguientes configuraciones:
           <ul>
@@ -41,8 +41,8 @@ export default function TriviaStart(props) {
         <Typography variant="h6">
           <strong>
             Al iniciar el examen el tiempo situado en la parte superior
-            comenzara a correr, el trivia finalizara si completa las 10
-            preguntas o el tiempo caduca. Abandonar el trivia lo cancelara.
+            comenzara a correr, el trivia finalizara si completa las preguntas o
+            el tiempo caduca. Abandonar el trivia lo cancelara.
           </strong>
         </Typography>
       </Grid>

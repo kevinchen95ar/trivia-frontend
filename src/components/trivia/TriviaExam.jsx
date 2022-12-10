@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Button,
@@ -13,7 +13,6 @@ export default function TriviaExam(props) {
   const {
     setFinished,
     currentQuestion,
-    setCurrentQuestion,
     stopTimer,
     questionQuantity,
     questions,
@@ -22,27 +21,12 @@ export default function TriviaExam(props) {
   const [answerSelected, setAnswerSelected] = useState("");
   const [answers, setAnswers] = useState([]);
 
-  const triviaFinish = () => {
-    setFinished(true);
-    stopTimer();
-  };
-
-  const lastQuestion = useMemo(() => {
-    if (parseInt(questionQuantity) === currentQuestion) {
-      return true;
-    }
-    return false;
-  }, [questionQuantity, currentQuestion]);
-
-  // TODO: No anda bien el tema de las respuestas, arranca aca
-
   const mixAnswers = () => {
     // Creamos un array con todas las respuestas
-    var respuestas = questions[currentQuestion - 1].incorrect_answers;
-    respuestas.push(questions[currentQuestion - 1].correct_answer);
-    if (respuestas.length < 2) {
-      return;
-    }
+    var respuestas = JSON.parse(
+      JSON.stringify(questions[currentQuestion.current - 1].incorrect_answers)
+    );
+    respuestas.push(questions[currentQuestion.current - 1].correct_answer);
     var mixedAnswers = [];
     const k = respuestas.length - 1;
     //tomamos un item randomico del array y lo vamos colocando en las respuestas mezcladas
@@ -60,11 +44,20 @@ export default function TriviaExam(props) {
     if (!answerSelected) {
       return;
     }
-
     setUserAnswers((p) => [...p, answerSelected]);
     setAnswerSelected("");
+    currentQuestion.current = currentQuestion.current + 1;
     mixAnswers();
-    setCurrentQuestion((prev) => prev + 1);
+  };
+
+  const onFinish = () => {
+    if (!answerSelected) {
+      return;
+    }
+    setUserAnswers((p) => [...p, answerSelected]);
+    setAnswerSelected("");
+    setFinished(true);
+    stopTimer();
   };
 
   useEffect(() => {
@@ -72,8 +65,6 @@ export default function TriviaExam(props) {
       mixAnswers();
     }
   }, [questions]);
-
-  //TODO: HASTA ACA
 
   return (
     <Grid>
@@ -86,14 +77,14 @@ export default function TriviaExam(props) {
         >
           <Grid item textAlign={"center"} xs={12} height={100} margin={5}>
             <Typography variant="h5">
-              {questions[currentQuestion - 1].question}
+              {questions[currentQuestion.current - 1].question}
             </Typography>
           </Grid>
         </Grid>
 
         <Divider />
 
-        {questions[currentQuestion - 1].type === "boolean" ? (
+        {questions[currentQuestion.current - 1].type === "boolean" ? (
           <Grid item textAlign={"left"} xs={12} style={{ margin: "20px" }}>
             <RadioGroup
               name="boolean-quiz"
@@ -157,12 +148,12 @@ export default function TriviaExam(props) {
         justifyContent="flex-end"
         alignItems="center"
       >
-        {!lastQuestion ? (
+        {!(parseInt(questionQuantity) === currentQuestion.current) ? (
           <Button variant="contained" onClick={onNext}>
             Siguiente
           </Button>
         ) : (
-          <Button variant="contained" onClick={triviaFinish}>
+          <Button variant="contained" onClick={onFinish}>
             Finalizar
           </Button>
         )}

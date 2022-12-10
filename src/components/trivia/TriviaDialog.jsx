@@ -4,10 +4,10 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { AppBar, Toolbar, Typography, Grid, Card } from "@mui/material";
-import { questionsHardCode } from "../../hardcode/QuestionHardCode";
 import TriviaStart from "./TriviaStart";
 import TriviaExam from "./TriviaExam";
 import TriviaFinish from "./TriviaFinish";
+import { questionsHardCode } from "../../hardcode/QuestionHardCode";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -19,14 +19,16 @@ export default function TriviaDialog(props) {
   // Trivia
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);
-  const [currentQuestion, setCurrentQuestion] = useState(1);
-  const [questions, setQuestions] = useState(questionsHardCode);
+  const currentQuestion = useRef(1);
+  const [questions, setQuestions] = useState([]);
   const [userAnswers, setUserAnswers] = useState([]);
 
   // time
-  const [seconds, setSeconds] = useState(0);
   const timerId = useRef();
-  const [triviaTime, setTriviaTime] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [triviaTime, setTriviaTime] = useState(1);
+
+  //TODO: traer las preguntas con el triviaSettings
 
   const formatTime = (initialTime, timer) => {
     let time = initialTime - timer;
@@ -82,23 +84,28 @@ export default function TriviaDialog(props) {
   //Comienza el temporizador
   const startTimer = () => {
     timerId.current = setInterval(() => {
-      setSeconds((prev) => prev + 1);
+      setElapsedTime((prev) => prev + 1);
     }, 1000);
   };
-
-  //Para el temporizador
+  //Detiene el temporizador
   const stopTimer = () => {
     clearInterval(timerId.current);
     timerId.current = 0;
   };
-
   //Reinicia el temporizador
   const resetTimer = () => {
     stopTimer();
-    if (seconds) {
-      setSeconds(0);
+    if (elapsedTime) {
+      setElapsedTime(0);
     }
   };
+  //Finalizar en caso de terminarse el tiempo
+  useEffect(() => {
+    if (elapsedTime === triviaTime) {
+      stopTimer();
+      setFinished(true);
+    }
+  }, [elapsedTime, triviaTime]);
 
   //cerrar dialog
   const dialogClose = () => {
@@ -106,16 +113,17 @@ export default function TriviaDialog(props) {
     setDialogOpen(false);
     setStarted(false);
     setFinished(false);
-    setCurrentQuestion(1);
+    currentQuestion.current = 1;
+    setQuestions([]);
+    setUserAnswers([]);
   };
 
   useEffect(() => {
-    if (triviaSettings) {
+    if (dialogOpen) {
       calculateTriviaTime(triviaSettings.difficulty, triviaSettings.quantity);
+      setQuestions(questionsHardCode);
     }
-  }, [triviaSettings.difficulty, triviaSettings.quantity, triviaSettings]);
-
-  //TODO: traer las preguntas con el triviaSettings
+  }, [triviaSettings.difficulty, triviaSettings.quantity, dialogOpen]);
 
   return (
     <div>
@@ -137,8 +145,8 @@ export default function TriviaDialog(props) {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              PREGUNTA: {currentQuestion}/{triviaSettings.quantity} - TIEMPO
-              RESTANTE: {formatTime(triviaTime, seconds)}
+              PREGUNTA: {currentQuestion.current}/{triviaSettings.quantity} -
+              TIEMPO RESTANTE: {formatTime(triviaTime, elapsedTime)}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -173,14 +181,20 @@ export default function TriviaDialog(props) {
                 <TriviaExam
                   setFinished={setFinished}
                   currentQuestion={currentQuestion}
-                  setCurrentQuestion={setCurrentQuestion}
                   stopTimer={stopTimer}
                   questionQuantity={triviaSettings.quantity}
                   questions={questions}
                   setUserAnswers={setUserAnswers}
                 />
               ) : (
-                <TriviaFinish />
+                <TriviaFinish
+                  finished={finished}
+                  quantity={triviaSettings.quantity}
+                  elapsedTime={elapsedTime}
+                  dialogClose={dialogClose}
+                  questions={questions}
+                  userAnswers={userAnswers}
+                />
               )}
             </Grid>
           </Card>
