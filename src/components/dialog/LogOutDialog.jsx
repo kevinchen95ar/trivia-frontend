@@ -1,14 +1,14 @@
 import React, { useContext } from "react";
-import PropTypes from "prop-types";
 import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { Grid } from "@mui/material";
-import { Typography } from "@mui/material";
-import { Button } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import {
+  Grid,
+  IconButton,
+  Typography,
+  Dialog,
+  DialogContent,
+} from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { LayoutContextProvider } from "../../context/LayoutContext";
 
@@ -20,35 +20,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-
-const BootstrapDialogTitle = (props) => {
-  const { children, onClose, ...other } = props;
-
-  return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  );
-};
-
-BootstrapDialogTitle.propTypes = {
-  children: PropTypes.node,
-  onClose: PropTypes.func.isRequired,
-};
 
 export default function LogOutDialog({ dialogOpen, setDialogOpen }) {
   const { setLoggedIn } = useContext(LayoutContextProvider);
@@ -70,7 +41,7 @@ export default function LogOutDialog({ dialogOpen, setDialogOpen }) {
   return (
     <div>
       <BootstrapDialog
-        aria-labelledby="customized-dialog-title"
+        aria-labelledby="Logout-Dialog"
         open={dialogOpen}
         maxWidth={"md"}
       >
@@ -90,15 +61,15 @@ export default function LogOutDialog({ dialogOpen, setDialogOpen }) {
                 to="/login"
                 style={{ textDecoration: "none", color: "black" }}
               >
-                <Button variant="contained" fullWidth onClick={onYes}>
-                  Si
-                </Button>
+                <IconButton variant="contained" fullWidth onClick={onYes}>
+                  <CheckIcon />
+                </IconButton>
               </NavLink>
             </Grid>
             <Grid item>
-              <Button variant="contained" fullWidth onClick={onNo}>
-                No
-              </Button>
+              <IconButton variant="contained" fullWidth onClick={onNo}>
+                <CloseIcon />
+              </IconButton>
             </Grid>
           </Grid>
         </DialogContent>

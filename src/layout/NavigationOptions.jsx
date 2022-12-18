@@ -33,7 +33,7 @@ export default function NavigationOptions() {
       ) : (
         ""
       )}
-      {loggedIn && loggedInRole === "Administrador" ? (
+      {loggedIn && loggedInRole === "ADMIN" ? (
         <NavLink to="/users" style={navLinkStyle}>
           <ListItemButton>
             <ListItemIcon>
@@ -45,8 +45,7 @@ export default function NavigationOptions() {
       ) : (
         ""
       )}
-      {loggedIn &&
-      (loggedInRole === "Administrador" || loggedInRole === "Editor") ? (
+      {loggedIn && (loggedInRole === "ADMIN" || loggedInRole === "EDITOR") ? (
         <NavLink to="/integration" style={navLinkStyle}>
           <ListItemButton>
             <ListItemIcon>

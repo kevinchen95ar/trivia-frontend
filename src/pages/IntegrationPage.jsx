@@ -7,6 +7,7 @@ import AddQuestion from "../components/AddQuestion";
 import AddCategory from "../components/AddCategory";
 import UnauthorizedPage from "./UnauthorizedPage";
 import axios from "axios";
+import AddIcon from "@mui/icons-material/Add";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 
@@ -79,7 +80,7 @@ export default function IntegrationPage() {
     if (reloadQuestion) {
       //Obtenemos todas las preguntas disponibles por cantidad en caso de que se necesite recargar
       axios
-        .get("http://localhost:4000/question/all")
+        .get("http://localhost:4000/question/quantity/all")
         .then((res) => {
           setQuestionRows(res.data);
           setReloadQuestion(false);
@@ -92,8 +93,7 @@ export default function IntegrationPage() {
 
   return (
     <React.Fragment>
-      {loggedIn &&
-      (loggedInRole === "Administrador" || loggedInRole === "Editor") ? (
+      {loggedIn && (loggedInRole === "ADMIN" || loggedInRole === "EDITOR") ? (
         <Grid container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
             <Paper
@@ -131,9 +131,16 @@ export default function IntegrationPage() {
                     <IconButton
                       variant="contained"
                       fullWidth
-                      onClick={() => setAddCategoryDialogOpen(true)}
+                      onClick={() => setReloadCategory(true)}
                     >
                       <RefreshIcon />
+                    </IconButton>
+                    <IconButton
+                      variant="contained"
+                      fullWidth
+                      onClick={() => setAddCategoryDialogOpen(true)}
+                    >
+                      <AddIcon />
                     </IconButton>
                     <CustomizedDialog
                       setDialogOpen={setAddCategoryDialogOpen}
@@ -190,6 +197,13 @@ export default function IntegrationPage() {
                     alignItems="center"
                   >
                     <IconButton
+                      variant="contained"
+                      fullWidth
+                      onClick={() => setReloadQuestion(true)}
+                    >
+                      <RefreshIcon />
+                    </IconButton>
+                    <IconButton
                       onClick={() => setAddQuestionDialogOpen(true)}
                       variant="contained"
                       fullWidth
@@ -203,6 +217,7 @@ export default function IntegrationPage() {
                     >
                       <AddQuestion
                         categories={categoryRows}
+                        setReload={setReloadQuestion}
                         setDialogOpen={setAddQuestionDialogOpen}
                       ></AddQuestion>
                     </CustomizedDialog>

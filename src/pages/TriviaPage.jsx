@@ -10,23 +10,16 @@ import {
 import { LayoutContextProvider } from "./../context/LayoutContext";
 import TriviaDialog from "../components/trivia/TriviaDialog";
 import UnauthorizedPage from "./UnauthorizedPage";
+import axios from "axios";
 
 //Datos Hardcodeados
-const category = [
-  { label: "Deporte" },
-  { label: "Alimentos" },
-  { label: "Ocio" },
-  { label: "Juegos" },
-  { label: "Peliculas" },
-  { label: "Animales" },
-];
 
 const difficulty = [{ label: "easy" }, { label: "medium" }, { label: "hard" }];
 
 const quantity = [{ label: "10" }, { label: "15" }, { label: "20" }];
 
 const initialTriviaSettings = {
-  category: "Deporte",
+  category: "General Knowledge",
   difficulty: "easy",
   quantity: "10",
 };
@@ -38,9 +31,30 @@ export default function TriviaPage() {
   const [triviaSettings, setTriviaSettings] = useState(initialTriviaSettings);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const [categories, setCategories] = useState([]);
+  const [reloadCategory, setReloadCategory] = useState(true);
   useEffect(() => {
     setHeaderTitle("Trivia");
   }, [setHeaderTitle]);
+
+  useEffect(() => {
+    if (reloadCategory) {
+      //Obtenemos todas las categorias en caso de que se necesite recargar
+      axios
+        .get("http://localhost:4000/category")
+        .then((res) => {
+          setReloadCategory(false);
+          var cat = [];
+          res.data.forEach((e) => {
+            cat.push({ label: e.category });
+          });
+          setCategories(cat);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [reloadCategory]);
 
   return (
     <React.Fragment>
@@ -70,7 +84,7 @@ export default function TriviaPage() {
                   <Autocomplete
                     fullWidth
                     id="category-autocomplete"
-                    options={category}
+                    options={categories}
                     value={triviaSettings.category}
                     clearIcon={false}
                     freeSolo={false}

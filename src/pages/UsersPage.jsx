@@ -74,7 +74,7 @@ export default function UsersPage() {
 
   return (
     <React.Fragment>
-      {loggedIn && loggedInRole === "Administrador" ? (
+      {loggedIn && loggedInRole === "ADMIN" ? (
         <Grid>
           <Card
             style={{
@@ -111,7 +111,7 @@ export default function UsersPage() {
           <CustomizedDialog
             setDialogOpen={setEditDialogOpen}
             dialogOpen={editDialogOpen}
-            modalTitle={"Edición de usuario"}
+            modalTitle={"Edición de rol"}
           >
             <EditUser
               setDialogOpen={setEditDialogOpen}

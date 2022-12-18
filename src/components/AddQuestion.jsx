@@ -1,6 +1,9 @@
-import { Autocomplete, Button, Grid, TextField } from "@mui/material";
+import { Autocomplete, IconButton, Grid, TextField } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import CheckIcon from "@mui/icons-material/Check";
+
+const sourceOptions = [{ label: "opentdb" }];
 
 const quantity = [
   { label: "10" },
@@ -11,7 +14,7 @@ const quantity = [
 ];
 
 export default function AddQuestion(props) {
-  const { categories, setDialogOpen } = props;
+  const { categories, setDialogOpen, setReload } = props;
   const [questionSettings, setQuestionSettings] = useState([]);
   const [difficulty, setDifficulty] = useState([]);
   const [category, setCategory] = useState([]);
@@ -44,7 +47,15 @@ export default function AddQuestion(props) {
   //TODO: falta hacer
   const onSubmit = () => {
     // Cerrar el dialog y hacer el promise para traer las preguntas con las questionSettings
-    console.log("agregar preguntas");
+    axios
+      .put("http://localhost:4000/question", questionSettings)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setReload(true);
     setDialogOpen(false);
   };
 
@@ -85,7 +96,6 @@ export default function AddQuestion(props) {
         />
       </Grid>
       <Grid item xs={12} marginBottom={2}>
-        {/* Agregar una opcion de cantidad de preguntas */}
         <Autocomplete
           fullWidth
           id="quantity-autocomplete"
@@ -102,16 +112,33 @@ export default function AddQuestion(props) {
           }}
         />
       </Grid>
-      <Grid
-        container
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="center"
-      >
-        <Grid item xs={3}>
-          <Button variant="contained" fullWidth onClick={onSubmit}>
-            Agregar
-          </Button>
+      <Grid item xs={12}>
+        <Autocomplete
+          fullWidth
+          id="source-autocomplete"
+          options={sourceOptions}
+          value={questionSettings.source}
+          clearIcon={false}
+          freeSolo={false}
+          renderInput={(params) => <TextField {...params} label="Source" />}
+          onChange={(e, newValue) => {
+            setQuestionSettings({
+              ...questionSettings,
+              source: newValue.label,
+            });
+          }}
+        />
+      </Grid>
+      <Grid item xs={12} marginTop={1}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <IconButton variant="contained" fullWidth onClick={onSubmit}>
+            <CheckIcon color="action" />
+          </IconButton>
         </Grid>
       </Grid>
     </Grid>

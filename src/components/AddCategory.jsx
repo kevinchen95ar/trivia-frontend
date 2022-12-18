@@ -1,26 +1,29 @@
-import { IconButton, Grid, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  IconButton,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 import axios from "axios";
 
 export default function AddCategory({ setDialogOpen, setReload }) {
+  const sourceOptions = [{ label: "opentdb" }];
+  const [source, setSource] = useState("");
   const [msg, setMsg] = useState("");
+
   const onYes = () => {
     //Actualizamos las categorias
     axios
-      .get("http://localhost:4000/category/update")
+      .put("http://localhost:4000/category/update", { source })
       .then((res) => {
         setMsg(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const onNo = () => {
-    // Cerrar la ventana
-    setDialogOpen(false);
   };
 
   const onOk = () => {
@@ -38,26 +41,31 @@ export default function AddCategory({ setDialogOpen, setReload }) {
           justifyContent="center"
           alignItems="center"
         >
-          <Grid item xs={12} marginBottom={2}>
-            <Typography variant="h6">
-              ¿Desea actualizar las categorias disponibles?
-            </Typography>
+          <Grid item xs={12}>
+            <Autocomplete
+              fullWidth
+              id="source-autocomplete"
+              options={sourceOptions}
+              value={source}
+              clearIcon={false}
+              freeSolo={false}
+              renderInput={(params) => <TextField {...params} label="Source" />}
+              onChange={(e, newValue) => {
+                setSource(newValue.label);
+              }}
+            />
           </Grid>
           <Grid
             container
             direction="row"
-            justifyContent="center"
+            justifyContent="flex-end"
             alignItems="center"
-            spacing={3}
+            marginTop={0.5}
+            marginBottom={-1}
           >
             <Grid item>
               <IconButton variant="contained" fullWidth onClick={onYes}>
                 <DoneIcon />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton variant="contained" fullWidth onClick={onNo}>
-                <CloseIcon />
               </IconButton>
             </Grid>
           </Grid>

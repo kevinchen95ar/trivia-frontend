@@ -107,7 +107,7 @@ export default function TriviaDialog(props) {
     }
   }, [elapsedTime, triviaTime]);
 
-  //cerrar dialog
+  //cerrar dialog y reiniciar todos los valores
   const dialogClose = () => {
     resetTimer();
     setDialogOpen(false);
@@ -165,42 +165,34 @@ export default function TriviaDialog(props) {
               minHeight: "600px",
             }}
           >
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-            >
-              {!started ? (
-                <TriviaStart
-                  setStarted={setStarted}
-                  startTimer={startTimer}
-                  triviaSettings={triviaSettings}
-                />
-              ) : !finished ? (
-                <TriviaExam
-                  setFinished={setFinished}
-                  currentQuestion={currentQuestion}
-                  stopTimer={stopTimer}
-                  questionQuantity={triviaSettings.quantity}
-                  questions={questions}
-                  setUserAnswers={setUserAnswers}
-                />
-              ) : (
-                <TriviaFinish
-                  finished={finished}
-                  quantity={triviaSettings.quantity}
-                  elapsedTime={elapsedTime}
-                  dialogClose={dialogClose}
-                  questions={questions}
-                  userAnswers={userAnswers}
-                />
-              )}
-            </Grid>
+            {!started ? (
+              <TriviaStart
+                setStarted={setStarted}
+                startTimer={startTimer}
+                triviaSettings={triviaSettings}
+              />
+            ) : !finished ? (
+              <TriviaExam
+                setFinished={setFinished}
+                currentQuestion={currentQuestion}
+                stopTimer={stopTimer}
+                questionQuantity={triviaSettings.quantity}
+                questions={questions}
+                setUserAnswers={setUserAnswers}
+              />
+            ) : (
+              <TriviaFinish
+                finished={finished}
+                quantity={triviaSettings.quantity}
+                elapsedTime={elapsedTime}
+                dialogClose={dialogClose}
+                questions={questions}
+                userAnswers={userAnswers}
+              />
+            )}
           </Card>
         </Grid>
       </Dialog>
     </div>
   );
 }
-// TODO: armar una box para comenzar el trivia q arranque el timer y obtenga las preguntas

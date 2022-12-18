@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Button, Grid, Typography } from "@mui/material";
 
 export default function TriviaFinish(props) {
   const {
@@ -10,6 +11,7 @@ export default function TriviaFinish(props) {
     dialogClose,
   } = props;
   const [score, setScore] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
 
   const calculateScore = () => {
     let correct = 0;
@@ -23,6 +25,7 @@ export default function TriviaFinish(props) {
         correct = correct + 1;
       }
     }
+    setCorrectAnswers(correct);
     // Factor dificultad
     switch (questions[5].difficulty) {
       case "easy":
@@ -57,8 +60,45 @@ export default function TriviaFinish(props) {
     }
   }, [finished]);
 
-  //TODO: terminar la muestra de puntaje y un boton para guardar
-  //TODO: hacer la request para enviar el puntaje a bd
+  const onSubmit = () => {
+    dialogClose();
+    //TODO: hacer la request para enviar el puntaje a bd
+  };
 
-  return <div>{score}</div>;
+  return (
+    <Grid
+      container
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Grid item xs={12} marginTop={15} marginBottom={2}>
+        <Typography variant="h2">¡Trivia finalizado!</Typography>
+      </Grid>
+      <Grid item xs={12} marginBottom={2}>
+        <Typography variant="h4">Tu puntaje es de:</Typography>
+      </Grid>
+      <Grid item xs={12} marginBottom={4}>
+        <Typography variant="h1">
+          <b>{score}</b>
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="h5" marginBottom={4}>
+          <b>Aciertos: {correctAnswers}</b>
+        </Typography>
+      </Grid>
+      <Grid item xs={12} marginX={2} marginBottom={3}>
+        <Typography variant="h6">
+          Gracias por participar, haga click para continuar y guardar su
+          puntaje.
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Button onClick={onSubmit} variant="contained">
+          Continuar
+        </Button>
+      </Grid>
+    </Grid>
+  );
 }
