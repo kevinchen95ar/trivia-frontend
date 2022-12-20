@@ -13,9 +13,8 @@ import { NavLink } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 export default function LogInPage() {
-  const { setHeaderTitle, setLoggedIn, setLoggedInRole } = useContext(
-    LayoutContextProvider
-  );
+  const { setHeaderTitle, setLoggedIn, setLoggedInRole, setUserID } =
+    useContext(LayoutContextProvider);
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
@@ -49,6 +48,8 @@ export default function LogInPage() {
       const decoded = jwt_decode(response.data.token);
       setLoggedInRole(decoded.role);
       setLoggedIn(true);
+      console.log(decoded.user);
+      setUserID(decoded.user);
       setSuccess(true);
 
       //limpieza de states e inputs

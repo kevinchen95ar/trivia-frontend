@@ -24,19 +24,25 @@ export default function TriviaExam(props) {
   const mixAnswers = () => {
     // Creamos un array con todas las respuestas
     var respuestas = JSON.parse(
-      JSON.stringify(questions[currentQuestion.current - 1].incorrect_answers)
+      JSON.stringify(questions[currentQuestion.current - 1].Answer)
     );
-    respuestas.push(questions[currentQuestion.current - 1].correct_answer);
-    var mixedAnswers = [];
-    const k = respuestas.length - 1;
-    //tomamos un item randomico del array y lo vamos colocando en las respuestas mezcladas
-    //de esta manera obtenemos un array mezclado
-    for (var j = 0; j <= k; j++) {
-      var i = Math.floor(Math.random() * respuestas.length);
-      var item = respuestas[i];
-      respuestas.splice(i, 1);
-      mixedAnswers.push(item);
+
+    // Creamos un array con solo el dato de la respuesta
+    var soloRespuestas = [];
+    for (var i = 0; i < respuestas.length; i++) {
+      soloRespuestas.push(respuestas[i].answer);
     }
+
+    // tomamos un item randomico del array y lo vamos colocando en las respuestas mezcladas
+    var mixedAnswers = [];
+    const length = soloRespuestas.length;
+    for (var j = 0; j < length; j++) {
+      var k = Math.floor(Math.random() * soloRespuestas.length);
+      var item = soloRespuestas[k];
+      mixedAnswers.push(item);
+      soloRespuestas.splice(k, 1);
+    }
+
     setAnswers(mixedAnswers);
   };
 
@@ -84,7 +90,7 @@ export default function TriviaExam(props) {
 
         <Divider />
 
-        {questions[currentQuestion.current - 1].type === "boolean" ? (
+        {questions[currentQuestion.current - 1].questionType === "boolean" ? (
           <Grid item textAlign={"left"} xs={12} style={{ margin: "20px" }}>
             <RadioGroup
               name="boolean-quiz"

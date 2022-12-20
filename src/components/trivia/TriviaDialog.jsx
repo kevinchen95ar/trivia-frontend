@@ -7,6 +7,7 @@ import { AppBar, Toolbar, Typography, Grid, Card } from "@mui/material";
 import TriviaStart from "./TriviaStart";
 import TriviaExam from "./TriviaExam";
 import TriviaFinish from "./TriviaFinish";
+import axios from "axios";
 import { questionsHardCode } from "../../hardcode/QuestionHardCode";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -80,6 +81,18 @@ export default function TriviaDialog(props) {
     setTriviaTime(time);
   };
 
+  const fetchQuestions = async () => {
+    // Llamada a actualizar el usuario al backend
+    await axios
+      .put("http://localhost:4000/question/get", triviaSettings)
+      .then((data) => {
+        setQuestions(data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   //TIMER FUNCTIONS
   //Comienza el temporizador
   const startTimer = () => {
@@ -121,7 +134,7 @@ export default function TriviaDialog(props) {
   useEffect(() => {
     if (dialogOpen) {
       calculateTriviaTime(triviaSettings.difficulty, triviaSettings.quantity);
-      setQuestions(questionsHardCode);
+      fetchQuestions();
     }
   }, [triviaSettings.difficulty, triviaSettings.quantity, dialogOpen]);
 
@@ -183,11 +196,12 @@ export default function TriviaDialog(props) {
             ) : (
               <TriviaFinish
                 finished={finished}
-                quantity={triviaSettings.quantity}
                 elapsedTime={elapsedTime}
+                triviaTime={triviaTime}
                 dialogClose={dialogClose}
                 questions={questions}
                 userAnswers={userAnswers}
+                triviaSettings={triviaSettings}
               />
             )}
           </Card>

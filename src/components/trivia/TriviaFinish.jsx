@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Grid, Typography } from "@mui/material";
+import axios from "axios";
+import { LayoutContextProvider } from "../../context/LayoutContext";
 
 export default function TriviaFinish(props) {
   const {
     finished,
     userAnswers,
     questions,
-    quantity,
     elapsedTime,
+    triviaTime,
     dialogClose,
+    triviaSettings,
   } = props;
+  const { userID } = useContext(LayoutContextProvider);
   const [score, setScore] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
 
@@ -17,17 +21,28 @@ export default function TriviaFinish(props) {
     let correct = 0;
     let difFactor = 1;
     let timeFactor = 1;
-    let quan = parseInt(quantity);
+    let quantity = parseInt(triviaSettings.quantity);
+
+    console.log(questions);
+    console.log(userID);
 
     // cantidad de respuestas correctas
     for (var j = 0; j < quantity; j++) {
-      if (questions[j].correct_answer === userAnswers[j]) {
-        correct = correct + 1;
+      const length = questions[j].Answer.length;
+
+      for (var k = 0; k < length; k++) {
+        if (
+          questions[j].Answer[k].correct === true &&
+          questions[j].Answer[k].answer === userAnswers[j]
+        ) {
+          correct = correct + 1;
+        }
       }
     }
     setCorrectAnswers(correct);
+
     // Factor dificultad
-    switch (questions[5].difficulty) {
+    switch (triviaSettings.difficulty) {
       case "easy":
         difFactor = 1;
         break;
@@ -41,16 +56,17 @@ export default function TriviaFinish(props) {
         difFactor = 0;
         break;
     }
+
     //  Factor tiempo
-    if (elapsedTime / quan < 5) {
+    if (elapsedTime / quantity < 5) {
       timeFactor = 5;
-    } else if (elapsedTime / quan < 20) {
+    } else if (elapsedTime / quantity < 20) {
       timeFactor = 3;
     } else {
       timeFactor = 1;
     }
 
-    setScore((correct / quan) * difFactor * timeFactor);
+    setScore((correct / quantity) * difFactor * timeFactor);
   };
 
   //Al finalizar calculamos el puntaje
@@ -60,9 +76,23 @@ export default function TriviaFinish(props) {
     }
   }, [finished]);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     dialogClose();
     //TODO: hacer la request para enviar el puntaje a bd
+
+    await axios
+      .post("http://localhost:4000/trivia/create", {
+        score: score,
+        triviaTime: elapsedTime,
+        timeAvailable: triviaTime,
+        userAnswers: userAnswers,
+        userId: userID,
+        Questions: questions,
+      })
+      .then((data) => {})
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
