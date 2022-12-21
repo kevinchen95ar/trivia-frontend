@@ -23,9 +23,6 @@ export default function TriviaFinish(props) {
     let timeFactor = 1;
     let quantity = parseInt(triviaSettings.quantity);
 
-    console.log(questions);
-    console.log(userID);
-
     // cantidad de respuestas correctas
     for (var j = 0; j < quantity; j++) {
       const length = questions[j].Answer.length;
@@ -78,8 +75,6 @@ export default function TriviaFinish(props) {
 
   const onSubmit = async () => {
     dialogClose();
-    //TODO: hacer la request para enviar el puntaje a bd
-
     await axios
       .post("http://localhost:4000/trivia/create", {
         score: score,
@@ -110,7 +105,7 @@ export default function TriviaFinish(props) {
       </Grid>
       <Grid item xs={12} marginBottom={4}>
         <Typography variant="h1">
-          <b>{score}</b>
+          <b>{score.toFixed(2)}</b>
         </Typography>
       </Grid>
       <Grid item xs={12}>

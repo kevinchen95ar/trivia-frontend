@@ -69,6 +69,7 @@ export default function TriviaExam(props) {
   useEffect(() => {
     if (questions) {
       mixAnswers();
+      console.log(questions);
     }
   }, [questions]);
 

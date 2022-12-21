@@ -48,7 +48,6 @@ export default function LogInPage() {
       const decoded = jwt_decode(response.data.token);
       setLoggedInRole(decoded.role);
       setLoggedIn(true);
-      console.log(decoded.user);
       setUserID(decoded.user);
       setSuccess(true);
 

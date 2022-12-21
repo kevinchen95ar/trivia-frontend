@@ -44,7 +44,6 @@ export default function AddQuestion(props) {
     setCategory(cat);
   }, [categories]);
 
-  //TODO: falta hacer
   const onSubmit = () => {
     // Cerrar el dialog y hacer el promise para traer las preguntas con las questionSettings
     axios

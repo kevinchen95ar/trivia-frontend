@@ -20,7 +20,14 @@ export default function RankingPage() {
       },
       flex: 1,
     },
-    { field: "triviaDate", headerName: "Fecha", flex: 1 },
+    {
+      field: "triviaDate",
+      headerName: "Fecha",
+      flex: 1,
+      valueGetter: (params) => {
+        return params.row.triviaDate.substring(0, 10);
+      },
+    },
     {
       field: "category",
       headerName: "Categoria",
@@ -52,7 +59,6 @@ export default function RankingPage() {
     axios
       .get("http://localhost:4000/trivia/get/all")
       .then((res) => {
-        console.log(res.data);
         setRows(res.data);
       })
       .catch((err) => {
