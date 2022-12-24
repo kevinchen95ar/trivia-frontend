@@ -1,5 +1,7 @@
 import { Autocomplete, IconButton, Grid, TextField } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { LayoutContextProvider } from "../../context/LayoutContext";
+
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -15,7 +17,14 @@ const quantity = [
 
 export default function AddQuestion(props) {
   const { categories, setDialogOpen, setReload } = props;
-  const [questionSettings, setQuestionSettings] = useState([]);
+  const { setSnackbarSeverity, setSnackbarMessage, setOpenSnackbar } =
+    useContext(LayoutContextProvider);
+  const [questionSettings, setQuestionSettings] = useState({
+    category: "",
+    difficulty: "",
+    quantity: "",
+    source: "",
+  });
   const [difficulty, setDifficulty] = useState([]);
   const [category, setCategory] = useState([]);
 
@@ -32,6 +41,9 @@ export default function AddQuestion(props) {
       })
       .catch((err) => {
         console.log(err);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(err.message);
+        setOpenSnackbar(true);
       });
   }, []);
 
@@ -45,14 +57,31 @@ export default function AddQuestion(props) {
   }, [categories]);
 
   const onSubmit = () => {
+    //Warning si faltan seleccionar datos
+    if (
+      questionSettings.category === "" ||
+      questionSettings.difficulty === "" ||
+      questionSettings.quantity === "" ||
+      questionSettings.source === ""
+    ) {
+      setSnackbarSeverity("warning");
+      setSnackbarMessage("Faltan seleccionar datos");
+      setOpenSnackbar(true);
+      return;
+    }
     // Cerrar el dialog y hacer el promise para traer las preguntas con las questionSettings
     axios
       .put("http://localhost:4000/question", questionSettings)
       .then((res) => {
-        console.log(res);
+        setSnackbarSeverity("success");
+        setSnackbarMessage(res.data);
+        setOpenSnackbar(true);
       })
       .catch((err) => {
         console.log(err);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(err.message);
+        setOpenSnackbar(true);
       });
     setReload(true);
     setDialogOpen(false);

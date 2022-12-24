@@ -18,43 +18,56 @@ const difficulty = [{ label: "easy" }, { label: "medium" }, { label: "hard" }];
 
 const quantity = [{ label: "10" }, { label: "15" }, { label: "20" }];
 
-const initialTriviaSettings = {
-  category: "General Knowledge",
-  difficulty: "easy",
-  quantity: "10",
-};
-
 export default function TriviaPage() {
-  const { setHeaderTitle, loggedIn } = useContext(LayoutContextProvider);
+  const {
+    setHeaderTitle,
+    loggedIn,
+    setSnackbarSeverity,
+    setSnackbarMessage,
+    setOpenSnackbar,
+  } = useContext(LayoutContextProvider);
 
   // trivia
-  const [triviaSettings, setTriviaSettings] = useState(initialTriviaSettings);
+  const [triviaSettings, setTriviaSettings] = useState({
+    category: "",
+    difficulty: "",
+    quantity: "",
+  });
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const [categories, setCategories] = useState([]);
-  const [reloadCategory, setReloadCategory] = useState(true);
-  useEffect(() => {
-    setHeaderTitle("Trivia");
-  }, [setHeaderTitle]);
+
+  const onConfirm = () => {
+    //Warning si no se seleccionaron todos los datos
+    if (
+      triviaSettings.category === "" ||
+      triviaSettings.difficulty === "" ||
+      triviaSettings.quantity === ""
+    ) {
+      setSnackbarSeverity("warning");
+      setSnackbarMessage("Faltan seleccionar datos");
+      setOpenSnackbar(true);
+      return;
+    }
+    setDialogOpen(true);
+  };
 
   useEffect(() => {
-    if (reloadCategory) {
-      //Obtenemos todas las categorias en caso de que se necesite recargar
-      axios
-        .get("http://localhost:4000/category")
-        .then((res) => {
-          setReloadCategory(false);
-          var cat = [];
-          res.data.forEach((e) => {
-            cat.push({ label: e.category });
-          });
-          setCategories(cat);
-        })
-        .catch((err) => {
-          console.log(err);
+    // Cada vez que accedemos a la pagina se settea el titulo en trivia y traemos la categoria
+    setHeaderTitle("Trivia");
+    axios
+      .get("http://localhost:4000/category")
+      .then((res) => {
+        var cat = [];
+        res.data.forEach((e) => {
+          cat.push({ label: e.category });
         });
-    }
-  }, [reloadCategory]);
+        setCategories(cat);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [setHeaderTitle]);
 
   return (
     <React.Fragment>
@@ -145,7 +158,7 @@ export default function TriviaPage() {
               <Grid container justifyContent="center">
                 <Grid item xs={11}>
                   <Button
-                    onClick={() => setDialogOpen(true)}
+                    onClick={onConfirm}
                     fullWidth
                     variant="contained"
                     color="primary"

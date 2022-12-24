@@ -4,7 +4,7 @@ import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import { Card, Grid, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import CustomizedDialog from "../components/dialog/Dialog";
-import EditUser from "../components/EditUser";
+import EditUser from "../components/users/EditUser";
 import axios from "axios";
 import UnauthorizedPage from "./UnauthorizedPage";
 
