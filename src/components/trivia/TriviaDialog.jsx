@@ -8,7 +8,6 @@ import TriviaStart from "./TriviaStart";
 import TriviaExam from "./TriviaExam";
 import TriviaFinish from "./TriviaFinish";
 import axios from "axios";
-import { questionsHardCode } from "../../hardcode/QuestionHardCode";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
