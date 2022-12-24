@@ -13,7 +13,8 @@ export default function TriviaFinish(props) {
     dialogClose,
     triviaSettings,
   } = props;
-  const { userID } = useContext(LayoutContextProvider);
+  const { userID, setSnackbarSeverity, setSnackbarMessage, setOpenSnackbar } =
+    useContext(LayoutContextProvider);
   const [score, setScore] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
 
@@ -84,9 +85,17 @@ export default function TriviaFinish(props) {
         userId: userID,
         Questions: questions,
       })
-      .then((data) => {})
+      .then((data) => {
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Se guardo su resultado correctamente.");
+        setOpenSnackbar(true);
+        console.log(data);
+      })
       .catch((error) => {
         console.log(error);
+        setSnackbarSeverity("error");
+        setSnackbarMessage(error.message);
+        setOpenSnackbar(true);
       });
   };
 
