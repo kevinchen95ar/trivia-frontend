@@ -77,7 +77,7 @@ export default function TriviaFinish(props) {
   const onSubmit = async () => {
     dialogClose();
     await axios
-      .post("http://localhost:4000/trivia/create", {
+      .post("https://trivia-tdp-backend.herokuapp.com/trivia/create", {
         score: score,
         triviaTime: elapsedTime,
         timeAvailable: triviaTime,

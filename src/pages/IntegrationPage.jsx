@@ -65,7 +65,7 @@ export default function IntegrationPage() {
     if (reloadCategory) {
       //Obtenemos todas las categorias en caso de que se necesite recargar
       axios
-        .get("http://localhost:4000/category")
+        .get("https://trivia-tdp-backend.herokuapp.com/category")
         .then((res) => {
           setCategoryRows(res.data);
           setReloadCategory(false);
@@ -80,7 +80,7 @@ export default function IntegrationPage() {
     if (reloadQuestion) {
       //Obtenemos todas las preguntas disponibles por cantidad en caso de que se necesite recargar
       axios
-        .get("http://localhost:4000/question/quantity/all")
+        .get("https://trivia-tdp-backend.herokuapp.com/question/quantity/all")
         .then((res) => {
           setQuestionRows(res.data);
           setReloadQuestion(false);

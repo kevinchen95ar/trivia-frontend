@@ -83,7 +83,10 @@ export default function TriviaDialog(props) {
   const fetchQuestions = async () => {
     // Llamada a actualizar el usuario al backend
     await axios
-      .put("http://localhost:4000/question/get", triviaSettings)
+      .put(
+        "https://trivia-tdp-backend.herokuapp.com/question/get",
+        triviaSettings
+      )
       .then((data) => {
         setQuestions(data.data);
       })

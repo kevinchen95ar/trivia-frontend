@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Button,
   Card,
+  CardMedia,
   Grid,
   TextField,
   Typography,
@@ -11,6 +12,7 @@ import { LayoutContextProvider } from "./../context/LayoutContext";
 import TriviaDialog from "../components/trivia/TriviaDialog";
 import UnauthorizedPage from "./UnauthorizedPage";
 import axios from "axios";
+import trivialogo from "../assets/triviaLogo.png";
 
 export default function TriviaPage() {
   const {
@@ -57,7 +59,7 @@ export default function TriviaPage() {
     // Cada vez que accedemos a la pagina se settea el titulo en trivia y traemos la categoria
     setHeaderTitle("Trivia");
     axios
-      .get("http://localhost:4000/question/quantity/all")
+      .get("https://trivia-tdp-backend.herokuapp.com/question/quantity/all")
       .then((res) => {
         setSettingsAvailable(res.data);
         //Obtenemos las opciones de categorias disponibles
@@ -124,7 +126,7 @@ export default function TriviaPage() {
         <Grid>
           <Card
             style={{
-              height: 500,
+              height: 540,
               width: 600,
               padding: "20px 5px",
               margin: "0 auto",
@@ -132,14 +134,11 @@ export default function TriviaPage() {
           >
             <Grid container>
               <Grid textAlign={"center"} item xs={12}>
-                <Typography
-                  component="h2"
-                  variant="h3"
-                  color="primary"
-                  gutterBottom
-                >
-                  Trivia
-                </Typography>
+                <CardMedia
+                  sx={{ height: 140 }}
+                  image={trivialogo}
+                  title="trivia logo"
+                />
               </Grid>
               <Grid container justifyContent={"center"}>
                 <Grid item xs={11} marginTop={3} marginBottom={1}>

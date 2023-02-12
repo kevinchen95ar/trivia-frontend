@@ -31,7 +31,7 @@ export default function AddQuestion(props) {
   //useEffect de difficulty
   useEffect(() => {
     axios
-      .get("http://localhost:4000/difficulty/all")
+      .get("https://trivia-tdp-backend.herokuapp.com/difficulty/all")
       .then((res) => {
         var dif = [];
         res.data.forEach((e) => {
@@ -71,7 +71,10 @@ export default function AddQuestion(props) {
     }
     // Cerrar el dialog y hacer el promise para traer las preguntas con las questionSettings
     axios
-      .put("http://localhost:4000/question", questionSettings)
+      .put(
+        "https://trivia-tdp-backend.herokuapp.com/question",
+        questionSettings
+      )
       .then((res) => {
         setSnackbarSeverity("success");
         setSnackbarMessage(res.data);

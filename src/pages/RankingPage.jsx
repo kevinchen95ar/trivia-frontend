@@ -57,7 +57,7 @@ export default function RankingPage() {
 
   const fetchRanking = async () => {
     axios
-      .get("http://localhost:4000/trivia/get/all")
+      .get("https://trivia-tdp-backend.herokuapp.com/trivia/get/all")
       .then((res) => {
         setRows(res.data);
       })
