@@ -18,7 +18,7 @@ export default function EditUser({
   const onSubmit = () => {
     // Llamada a actualizar el usuario al backend
     axios
-      .put("http://localhost:4000/users", userData)
+      .put("https://trivia-tdp-backend.herokuapp.com/users", userData)
       .then(() => {
         setSnackbarSeverity("success");
         setSnackbarMessage("Actualizacion exitosa.");

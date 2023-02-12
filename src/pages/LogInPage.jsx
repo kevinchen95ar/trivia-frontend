@@ -35,10 +35,13 @@ export default function LogInPage() {
 
     try {
       //Peticion de inicio de sesión
-      const response = await axios.post("http://localhost:4000/login", {
-        username: user,
-        password: pwd,
-      });
+      const response = await axios.post(
+        "https://trivia-tdp-backend.herokuapp.com/login",
+        {
+          username: user,
+          password: pwd,
+        }
+      );
 
       //Inicio de sesion exitoso.
 

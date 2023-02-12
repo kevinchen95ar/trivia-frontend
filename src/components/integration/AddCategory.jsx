@@ -19,7 +19,9 @@ export default function AddCategory({ setDialogOpen, setReload }) {
     }
     //Actualizamos las categorias
     axios
-      .put("http://localhost:4000/category/update", { source })
+      .put("https://trivia-tdp-backend.herokuapp.com/category/update", {
+        source,
+      })
       .then((res) => {
         setSnackbarSeverity("success");
         setSnackbarMessage(res.data);

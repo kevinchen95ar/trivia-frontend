@@ -79,7 +79,7 @@ export default function RegisterPage() {
     }
     try {
       //Peticion al backend de registro
-      await axios.post("http://localhost:4000/register", {
+      await axios.post("https://trivia-tdp-backend.herokuapp.com/register", {
         username: user,
         password: pwd,
       });

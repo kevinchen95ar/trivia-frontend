@@ -27,7 +27,7 @@ export default function UsersPage() {
     if (reload) {
       //Obtenemos todos los usuarios en caso de que se necesite recargar
       axios
-        .get("http://localhost:4000/users")
+        .get("https://trivia-tdp-backend.herokuapp.com/users")
         .then((res) => {
           setRows(res.data);
         })
